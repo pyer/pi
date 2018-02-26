@@ -2,6 +2,10 @@ require './lib/base'
 
 class App < Base
   get '/' do
+    File.read('app/home.html')
+  end
+
+  get '/hello' do
     'Hello World !'
   end
 
