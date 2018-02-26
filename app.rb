@@ -28,11 +28,15 @@ class App < Base
     File.read('dist/themes/default/32px.png')
   end
 
+  get '/themes/default/style.css' do
+    File.read('themes/default/style.css')
+  end
+
   get '/tree' do
     Tree.new.subtree('.')
   end
 
   get '/favicon.ico' do
-    File.read('images/pi.ico')
+    File.read('themes/default/pi.ico')
   end
 end
