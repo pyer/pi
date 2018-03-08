@@ -13,6 +13,9 @@ class App < Base
     Time.now.strftime("%d/%m/%Y %H:%M:%S")
   end
 
+  get '/chart' do
+    File.read('app/chart.html')
+  end
   get '/files' do
     File.read('app/files.html')
   end
@@ -30,6 +33,16 @@ class App < Base
   end
   get '/dist/themes/default/32px.png' do
     File.read('dist/themes/default/32px.png')
+  end
+
+  get '/dist/d3.min.js' do
+    File.read('dist/d3.min.js')
+  end
+  get '/dist/c3.min.js' do
+    File.read('dist/c3.min.js')
+  end
+  get '/dist/themes/c3.min.css' do
+    File.read('dist/themes/c3.min.css')
   end
 
   get '/themes/default/style.css' do
