@@ -2,6 +2,7 @@
 
 require './app'
 require 'webrick/log'
+
 log = WEBrick::Log.new
-log.info("PI #{VERSION}")
-run App.entry
+log.info("PI server #{VERSION}")
+run App.server

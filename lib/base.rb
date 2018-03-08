@@ -8,7 +8,6 @@ require './lib/version.rb'
 class Base
     class << self
 
-#@logger = @config[:Logger]
       @@routes = Hash.new { |hash, key| hash[key] = [] }
 
       ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'PATCH', 'POST', 'PUT'].each do |verb|
@@ -17,7 +16,7 @@ class Base
         end
       end
 
-      def entry
+      def server
         builder = Rack::Builder.new
         builder.run new
       end
