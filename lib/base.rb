@@ -25,7 +25,13 @@ class Base
     def call(env)
       req = Rack::Request.new(env)
       route = find_route(req)
-      return Error::error404 if route.nil?
+      if route.nil?
+        fname = '.' + req.path_info
+        return Error::error404 unless File.exist?(fname)
+        mime = find_mime(req)
+        body = File.read(fname)
+        return Response::ok(body,mime)
+      end
       mime = find_mime(req)
       return Response::ok(instance_eval(&route[:block]),mime)
     end
