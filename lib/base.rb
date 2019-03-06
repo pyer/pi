@@ -7,18 +7,12 @@ require './lib/version.rb'
 
 class Base
     class << self
-
       @@routes = Hash.new { |hash, key| hash[key] = [] }
 
       ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'PATCH', 'POST', 'PUT'].each do |verb|
         define_method(verb.downcase) do |path, &block|
           @@routes[verb] << { path: path, block: block }
         end
-      end
-
-      def server
-        builder = Rack::Builder.new
-        builder.run new
       end
     end
 
