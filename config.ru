@@ -28,8 +28,14 @@ class Appli < Base
   end
 
   get '/favicon.ico' do
-    File.read('www/pi.ico')
+    File.read('images/pi.ico')
   end
+
+  get '/robots.txt' do
+  '<pre style="word-wrap: break-word; white-space: pre-wrap;">User-agent: *
+Disallow: /</pre>'
+  end
+
 end
 
 run Appli.new
