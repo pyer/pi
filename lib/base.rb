@@ -16,6 +16,10 @@ class Base
       end
     end
 
+    def inspect_req
+      p self.class.name
+    end
+
     def call(env)
       req = Rack::Request.new(env)
       route = find_route(req)
