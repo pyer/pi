@@ -12,7 +12,7 @@ class Appli < Base
   end
 
   get '/favicon.ico' do
-    File.read('images/pi.ico')
+    File.read('www/images/pi.ico')
   end
 
   get '/files' do
@@ -24,7 +24,7 @@ class Appli < Base
   end
 
   get '/image' do
-    File.read('images/apollo13.jpg')
+    File.read('www/images/apollo13.jpg')
   end
 
   get '/robots.txt' do
