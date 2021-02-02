@@ -45,7 +45,7 @@ class Base
       dot = req.path_info.rindex('.')
       return DEFAULT_MIME_TYPE if dot.nil?
       len = req.path_info.length
-      ext = req.path_info[dot, len]
+      ext = req.path_info[dot+1, len]
       mime = MIME_TYPE[ext]
       return DEFAULT_MIME_TYPE if mime.nil?
       return mime
