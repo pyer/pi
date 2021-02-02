@@ -1,6 +1,7 @@
 #\ -w -p 8080 -s webrick
 
-require './lib/base'
+require './ruby/base'
+require './ruby/version'
 
 class Appli < Base
   get '/' do
@@ -38,6 +39,10 @@ Disallow: /</pre>'
 
   get '/tree' do
     Tree.new.subtree('.')
+  end
+
+  get '/version' do
+    'Version ' + VERSION
   end
 
 end

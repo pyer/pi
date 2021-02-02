@@ -1,9 +1,8 @@
 
-require './lib/error.rb'
-require './lib/mime_type.rb'
-require './lib/response.rb'
-require './lib/tree.rb'
-require './lib/version.rb'
+require './ruby/error.rb'
+require './ruby/mime_type.rb'
+require './ruby/response.rb'
+require './ruby/tree.rb'
 
 class Base
     class << self
