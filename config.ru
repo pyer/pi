@@ -1,5 +1,3 @@
-#\ -w -p 8080 -s webrick
-
 require './ruby/base'
 require './ruby/version'
 
