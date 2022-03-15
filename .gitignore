@@ -2,6 +2,9 @@
 *~
 tmp/
 
+# Crystal output
+pi
+
 # Ruby files to ignore
 *.gem
 *.rbc
