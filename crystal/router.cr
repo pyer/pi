@@ -1,5 +1,5 @@
 require "http/server"
-require "./config"
+require "./appli"
 
 class Router
   include HTTP::Handler
