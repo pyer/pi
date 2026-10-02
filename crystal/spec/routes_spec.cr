@@ -1,6 +1,8 @@
 require "minispec"
 require "../src/routes"
 
+VERSION="x.y.z"
+
 class Mock
   @@count = 0
 
