@@ -4,9 +4,9 @@ tmp/
 
 # Crystal files to ignore
 shard.lock
-/Crystal/bin/
-/Crystal/docs/
-/Crystal/lib/
+/crystal/bin/
+/crystal/docs/
+/crystal/lib/
 .shards/
 *.dwarf
 pi
