@@ -10,7 +10,7 @@ This GitHub repository hosts several versions of pi, written in Crystal and Ruby
 ## Build
 
 ```
-cd Crystal
+cd crystal
 shards install
 crystal build --progress src/pi.cr
 cd ..
@@ -19,7 +19,7 @@ cd ..
 ## Run
 
 ```
-Crystal/pi
+crystal/pi
 ```
 
 
