@@ -25,12 +25,25 @@ Crystal/pi
 
 # Ruby
 
+## Install required gems
+
+- puma
+- rack
+
+```
+gem install puma rack
+```
+
+
+## Build
+
 No build.
+
 
 ## Run
 
 ```
-rackup -p 8080
+puma
 ```
 
 
