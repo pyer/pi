@@ -1,8 +1,7 @@
 
 require "http/server"
 require "./router.cr"
-
-VERSION = {{ `shards version`.chomp.stringify}}
+require "./version.cr"
 
 puts "PI version " + VERSION + " starting..."
 
