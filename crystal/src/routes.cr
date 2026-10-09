@@ -1,4 +1,5 @@
 # PI server routes
+require "./tree.cr"
 
 module Routes
 
@@ -13,6 +14,10 @@ module Routes
 
     get "/favicon.ico" do
       File.read("www/images/pi.ico")
+    end
+
+    get "/files" do
+      File.read("www/files.html")
     end
 
     get "/hello" do
@@ -30,6 +35,10 @@ Disallow: /</pre>"
 
     get "/time" do
       Time.local.to_s("%d/%m/%Y %H:%M:%S")
+    end
+
+    get "/tree" do
+      Tree.new.subtree(".")
     end
 
     get "/version" do

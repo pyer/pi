@@ -7,6 +7,6 @@ include Routes
 
 test "number of routes" do
   routes
-  assert_equal Mock.count, 8
+  assert_equal Mock.count, 10
 end
 

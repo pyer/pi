@@ -1,18 +1,21 @@
 
 require "http/server"
-require "./router.cr"
+
+require "./handlers/error_handler.cr"
+require "./handlers/routes_handler.cr"
+require "./handlers/static_file_handler.cr"
 require "./version.cr"
 
 puts "PI version " + VERSION + " starting..."
 
 # HTTP::Handler(s)
+#static = HTTP::StaticFileHandler.new(File.expand_path("."))
+static = StaticFileHandler.new(File.expand_path("."))
 log    = HTTP::LogHandler.new
-error  = HTTP::ErrorHandler.new
-static = HTTP::StaticFileHandler.new(File.expand_path("."))
-router = Router.new
+error  = ErrorHandler.new
+router = RoutesHandler.new
 
 handlers = [ log, error, router, static ]
-#handlers = [ log, error, static ]
 
 server = HTTP::Server.new(handlers)
 address = server.bind_tcp 8080
