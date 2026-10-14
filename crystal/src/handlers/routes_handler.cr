@@ -22,10 +22,12 @@ class RoutesHandler
     begin
       key = context.request.method+" "+context.request.path
       text = @routes[key].call
+      @log.info {"text = #{text}"}
       context.response.reset
       context.response.content_type = _find_mime(key)
       context.response.puts(text)
     rescue KeyError
+      @log.info {"call next"}
       call_next(context)
     end
     @log.info {"exit RoutesHandler"}

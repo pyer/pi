@@ -1,5 +1,4 @@
 require "minispec"
-require "http/server"
 require "../src/handlers/routes_handler"
 
 test "default mime type" do

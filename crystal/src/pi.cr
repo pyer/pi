@@ -9,8 +9,8 @@ require "./version.cr"
 puts "PI version " + VERSION + " starting..."
 
 # HTTP::Handler(s)
-#static = HTTP::StaticFileHandler.new(File.expand_path("."))
-static = StaticFileHandler.new(File.expand_path("."))
+#static = HTTP::StaticFileHandler.new(File.expand_path("www"))
+static = StaticFileHandler.new(File.expand_path("www"))
 log    = HTTP::LogHandler.new
 error  = ErrorHandler.new
 router = RoutesHandler.new

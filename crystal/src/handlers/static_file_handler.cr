@@ -1,4 +1,3 @@
-require "ecr/macros"
 require "html"
 require "uri"
 require "mime"
@@ -26,49 +25,40 @@ class StaticFileHandler
   #
   def initialize(public_dir : String, @log = Log.for("http.server"))
     @public_dir = Path.new(public_dir).expand
+    @log.info {"public directory = #{@public_dir}"}
   end
 
   def call(context : HTTP::Server::Context) : Nil
     @log.info {"call static file handler"}
-    check_request_method!(context) || return
 
-    request_path = request_path(context)
+    if context.request.method.in?("GET", "HEAD")
+      request_path = request_path(context)
+      # File path cannot contain '\0' (NUL) because all filesystem I know
+      # don't accept '\0' character as file name.
+      # ".." is not allowed for security
+      if request_path.includes?('\0')|| request_path.includes?("..")
+        context.response.respond_with_status(:bad_request)
+        return
+      end
 
-    check_request_path!(context, request_path) || return
+      @log.info {"request path  = #{request_path}"}
+      request_path = Path.posix(request_path)
+      expanded_path = request_path.expand("/")
+      @log.info {"expanded path = #{expanded_path}"}
 
-    @log.info {"request path  = #{request_path}"}
-    request_path = Path.posix(request_path)
-    expanded_path = request_path.expand("/")
-    @log.info {"expanded path = #{expanded_path}"}
+      file_path = @public_dir.join(request_path.to_kind(Path::Kind.native))
+      file_info = File.info?(file_path)
 
-    file_path = @public_dir.join(request_path.to_kind(Path::Kind.native))
-    file_info = File.info?(file_path)
+      if normalized_path = normalize_request_path(context, request_path, expanded_path, file_info)
+        return redirect_to context, normalized_path
+      end
 
-    if normalized_path = normalize_request_path(context, request_path, expanded_path, file_info)
-      return redirect_to context, normalized_path
+      return call_next(context) unless file_info
+      return serve_file_with_cache(context, file_info, file_path) if file_info.file?
     end
-
-    return call_next(context) unless file_info
-    return serve_file_with_cache(context, file_info, file_path) if file_info.file?
     # Not a normal file (directory/FIFO/device/socket)
+    # or not a GET or HEAD method
     call_next(context)
-  end
-
-  private def check_request_method!(context : HTTP::Server::Context) : Bool
-    return true if context.request.method.in?("GET", "HEAD")
-    call_next(context)
-    false
-  end
-
-  private def check_request_path!(context : HTTP::Server::Context, request_path : String) : Bool
-    # File path cannot contain '\0' (NUL) because all filesystem I know
-    # don't accept '\0' character as file name.
-    if request_path.includes? '\0'
-      context.response.respond_with_status(:bad_request)
-      return false
-    end
-
-    true
   end
 
   private def normalize_request_path(context : HTTP::Server::Context, request_path : Path, expanded_path : Path, file_info) : Path?
