@@ -1,3 +1,4 @@
+require "http"
 require "html"
 require "uri"
 require "mime"
@@ -8,7 +9,7 @@ require "mime"
 # with the same name and `.gz` extension appended is found in the same directory.
 # Precompressed files are only served if they are newer than the original file.
 #
-class StaticFileHandler
+class PI::StaticFileHandler
   include HTTP::Handler
 
   # In some file systems, using `gz --keep` to compress the file will keep the

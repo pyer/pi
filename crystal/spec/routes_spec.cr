@@ -3,7 +3,7 @@ require "./routes_helper"
 require "../src/handlers/routes_handler"
 
 pending "number of routes" do
-  router = RoutesHandler.new
+  router = PI::RoutesHandler.new
   assert_equal router.@routes.size, 10
 end
 
@@ -13,7 +13,7 @@ end
 
 
 test "home" do
-  router = RoutesHandler.new
+  router = PI::RoutesHandler.new
   request  = HTTP::Request.new("GET", "/")
   response = HTTP::Server::Response.new(IO::Memory.new(0))
   context  = HTTP::Server::Context.new(request, response)
@@ -23,7 +23,7 @@ test "home" do
 end
 
 test "version" do
-  router = RoutesHandler.new
+  router = PI::RoutesHandler.new
   request  = HTTP::Request.new("GET", "/version")
   response = HTTP::Server::Response.new(IO::Memory.new(0))
   context  = HTTP::Server::Context.new(request, response)
@@ -33,7 +33,7 @@ test "version" do
 end
 
 test "error404" do
-  router = RoutesHandler.new
+  router = PI::RoutesHandler.new
   request  = HTTP::Request.new("GET", "/xxx")
   response = HTTP::Server::Response.new(IO::Memory.new(0))
   context  = HTTP::Server::Context.new(request, response)

@@ -1,8 +1,9 @@
+require "http"
 require "../routes"
 
-class RoutesHandler
+class PI::RoutesHandler
   include HTTP::Handler
-  include Routes
+  include PI::Routes
   @routes = Hash(String, Proc(String)).new
 
   def initialize(@log = Log.for("http.server"))
@@ -22,7 +23,6 @@ class RoutesHandler
     begin
       key = context.request.method+" "+context.request.path
       text = @routes[key].call
-      @log.info {"text = #{text}"}
       context.response.reset
       context.response.content_type = _find_mime(key)
       context.response.puts(text)
@@ -61,4 +61,3 @@ class RoutesHandler
   end
 
 end
-

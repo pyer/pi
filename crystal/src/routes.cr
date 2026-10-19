@@ -1,7 +1,7 @@
 # PI server routes
 require "./tree.cr"
 
-module Routes
+module PI::Routes
 
   def routes
     get "/" do

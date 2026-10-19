@@ -1,4 +1,4 @@
-class Tree
+class PI::Tree
 
   def subtree(root : String = ".")
     files = Dir.entries(root).sort!

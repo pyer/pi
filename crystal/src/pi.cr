@@ -6,14 +6,13 @@ require "./handlers/routes_handler.cr"
 require "./handlers/static_file_handler.cr"
 require "./version.cr"
 
-puts "PI version " + VERSION + " starting..."
+puts "PI version " + PI::VERSION + " starting..."
 
 # HTTP::Handler(s)
-#static = HTTP::StaticFileHandler.new(File.expand_path("www"))
-static = StaticFileHandler.new(File.expand_path("www"))
 log    = HTTP::LogHandler.new
-error  = ErrorHandler.new
-router = RoutesHandler.new
+error  = PI::ErrorHandler.new
+router = PI::RoutesHandler.new
+static = PI::StaticFileHandler.new(File.expand_path("www"))
 
 handlers = [ log, error, router, static ]
 
