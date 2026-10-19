@@ -5,6 +5,7 @@ class PI::RoutesHandler
   include HTTP::Handler
   include PI::Routes
   @routes = Hash(String, Proc(String)).new
+  @attachments = Hash(String, Bool).new
 
   def initialize(@log = Log.for("http.server"))
     routes
@@ -12,10 +13,11 @@ class PI::RoutesHandler
 
   # @routes is a hash where key=method:path
   # the value is the content of the response sent to the client
-  def get(path : String, &block : -> String)
+  def get(path : String, attachment : Bool = false, &block : -> String)
     # puts "  get " + path
     # filling the hash
     @routes["GET "+path] = block
+    @attachments["GET "+path] = attachment
   end
 
   def call(context : HTTP::Server::Context) : Nil
@@ -24,7 +26,13 @@ class PI::RoutesHandler
       key = context.request.method+" "+context.request.path
       text = @routes[key].call
       context.response.reset
-      context.response.content_type = _find_mime(key)
+      att = @attachments[key]
+      if att
+        context.response.headers["Content-Disposition"] = "attachment"
+        context.response.content_type = STREAM_MIME_TYPE
+      else
+        context.response.content_type = _find_mime(key)
+      end
       context.response.puts(text)
     rescue KeyError
       @log.info {"call next"}

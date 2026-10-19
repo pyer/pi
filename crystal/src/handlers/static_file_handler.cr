@@ -33,7 +33,7 @@ class PI::StaticFileHandler
     @log.info {"call static file handler"}
 
     if context.request.method.in?("GET", "HEAD")
-      request_path = request_path(context)
+      request_path = URI.decode(context.request.path.not_nil!)
       # File path cannot contain '\0' (NUL) because all filesystem I know
       # don't accept '\0' character as file name.
       # ".." is not allowed for security
@@ -42,17 +42,8 @@ class PI::StaticFileHandler
         return
       end
 
-      @log.info {"request path  = #{request_path}"}
-      request_path = Path.posix(request_path)
-      expanded_path = request_path.expand("/")
-      @log.info {"expanded path = #{expanded_path}"}
-
-      file_path = @public_dir.join(request_path.to_kind(Path::Kind.native))
+      file_path = @public_dir.join(request_path)
       file_info = File.info?(file_path)
-
-      if normalized_path = normalize_request_path(context, request_path, expanded_path, file_info)
-        return redirect_to context, normalized_path
-      end
 
       return call_next(context) unless file_info
       return serve_file_with_cache(context, file_info, file_path) if file_info.file?
@@ -60,12 +51,6 @@ class PI::StaticFileHandler
     # Not a normal file (directory/FIFO/device/socket)
     # or not a GET or HEAD method
     call_next(context)
-  end
-
-  private def normalize_request_path(context : HTTP::Server::Context, request_path : Path, expanded_path : Path, file_info) : Path?
-    if request_path != expanded_path
-      expanded_path
-    end
   end
 
   private def serve_file_with_cache(context : HTTP::Server::Context, file_info, file_path : Path)
@@ -219,27 +204,8 @@ class PI::StaticFileHandler
     ranges unless ranges.empty?
   end
 
-  private def request_path(context : HTTP::Server::Context) : String
-    original_path = context.request.path.not_nil!
-
-    request_path(URI.decode(original_path))
-  end
-
-  # given a full path of the request, returns the path
-  # of the file that should be expanded at the public_dir
-  protected def request_path(path : String) : String
-    path
-  end
-
-  private def redirect_to(context : HTTP::Server::Context, path)
-    @log.info {"redirect to #{path.to_s}"}
-    uri = context.request.uri.dup
-    uri.path = URI.encode_path(path.to_s)
-    context.response.redirect uri
-  end
-
   private def add_cache_headers(response_headers : HTTP::Headers, last_modified : Time) : Nil
-    response_headers["Etag"] = etag(last_modified)
+    response_headers["Etag"] = %{W/"#{last_modified.to_unix}"}
     response_headers["Last-Modified"] = HTTP.format_time(last_modified)
   end
 
@@ -259,10 +225,6 @@ class PI::StaticFileHandler
     else
       false
     end
-  end
-
-  private def etag(modification_time)
-    %{W/"#{modification_time.to_unix}"}
   end
 
 end

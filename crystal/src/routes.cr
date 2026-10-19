@@ -28,6 +28,11 @@ module PI::Routes
       File.read("www/images/apollo13.jpg")
     end
 
+# All of this is decided based on the Content-Disposition header. Loosely speaking, it can take 2 values attachment or inline
+    get "/download", true do
+      File.read("www/images/apollo13.jpg")
+    end
+
     get "/robots.txt" do
       "<pre style=\"word-wrap: break-word; white-space: pre-wrap;\">User-agent: *
 Disallow: /</pre>"
